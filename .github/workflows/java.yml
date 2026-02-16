@@ -1,0 +1,39 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Compile Java program
+      run: javac Hello.java
+      
+    - name: Run Java program
+      run: java Hello
+      
+    - name: Verify output (optional)
+      run: |
+        output=$(java Hello)
+        echo "Program output: $output"
+        if [ "$output" = "Hello from GitHub Actions" ]; then
+          echo "Output matches expected!"
+        else
+          echo "Output doesn't match expected"
+          exit 1
+        fi
